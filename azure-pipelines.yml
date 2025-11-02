@@ -1,0 +1,48 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  node_version: '18.x'
+  build_dir: 'client'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '$(node_version)'
+    displayName: 'Install Node.js'
+
+  - script: |
+      cd $(build_dir)
+      npm install
+      npm run build
+    displayName: 'Build React App'
+
+  - script: |
+      cd $(build_dir)
+      npm test
+    displayName: 'Run Tests'
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: 'client/build'
+      Contents: '**'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/client_build'
+    displayName: 'Copy React Build Artifacts'
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: 'server'
+      Contents: '**'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/server'
+    displayName: 'Copy Server Files'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
