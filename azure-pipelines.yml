@@ -6,7 +6,7 @@ trigger:
 pool:
   name: 'Default'
   demands:
-    - agent.name -equals AzureDevopsVM
+    - agent.name -equals az-dev-pipe
 
 variables:
   node_version: '18.x'
