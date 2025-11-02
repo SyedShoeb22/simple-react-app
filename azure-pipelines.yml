@@ -4,7 +4,9 @@ trigger:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'Default'
+  demands:
+    - agent.name -equals AzureDevopsVM
 
 variables:
   node_version: '18.x'
