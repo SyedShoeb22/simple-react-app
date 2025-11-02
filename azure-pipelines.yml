@@ -19,7 +19,7 @@ steps:
     displayName: 'Install Node.js'
 
   - script: |
-      cd client
+      cd $(build_dir)
       npm install
       npm run build
     displayName: 'Build React App'
